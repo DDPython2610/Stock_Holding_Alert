@@ -4,11 +4,11 @@ import requests
 from bs4 import BeautifulSoup
 
 # Establish a connection to SQLite database
-conn = sqlite3.connect('stock_data_alert.db')
+conn = sqlite3.connect('stock_alert.db')
 c = conn.cursor()
 
 # Create table if not exists
-c.execute('''CREATE TABLE IF NOT EXISTS stock_data_alert
+c.execute('''CREATE TABLE IF NOT EXISTS stock_data
              (id INTEGER PRIMARY KEY AUTOINCREMENT, 
              ticker TEXT UNIQUE, 
              exchange TEXT UNIQUE,
@@ -20,7 +20,7 @@ conn.commit()
 # Function to display the table
 def display_records():
     st.subheader("Read Records")
-    c.execute("SELECT * FROM stock_data_alert")
+    c.execute("SELECT * FROM stock_data")
     result = c.fetchall()
     for row in result:
         st.write(row)
@@ -34,12 +34,11 @@ def create_record():
     highest_price = st.text_input("Enter the resistance price")
     lowest_price = st.text_input("Enter the support price")
     if st.button("Create"):
-        try:
-            c.execute("INSERT INTO stock_data_alert (ticker, exchange, notes, highest_price, lowest_price) VALUES (?, ?, ?, ?, ?)", (ticker, exchange, notes, highest_price, lowest_price))
-            conn.commit()
-            st.success("Record Created Successfully!!!")
-        except sqlite3.IntegrityError:
-            st.error("Ticker or Exchange already exists!")
+        
+        c.execute("INSERT INTO stock_data (ticker, exchange, notes, highest_price, lowest_price) VALUES (?, ?, ?, ?, ?)", (ticker, exchange, notes, highest_price, lowest_price))
+        conn.commit()
+        st.success("Record Created Successfully!!!")
+        
 
 # Function to update a record
 def update_record():
@@ -51,26 +50,26 @@ def update_record():
     highest_price = st.text_input("Enter the resistance price")
     lowest_price = st.text_input("Enter the support price")
     if st.button("Update"):
-        try:
-            c.execute("UPDATE stock_data_alert SET ticker=?, exchange=?, notes=?, highest_price=?, lowest_price=? WHERE id=?", (ticker, exchange, notes, highest_price, lowest_price, id))
-            conn.commit()
-            st.success("Record Updated Successfully!!!")
-        except sqlite3.IntegrityError:
-            st.error("Ticker or Exchange already exists!")
+    
+        c.execute("UPDATE stock_data SET ticker=?, exchange=?, notes=?, highest_price=?, lowest_price=? WHERE id=?", (ticker, exchange, notes, highest_price, lowest_price, id))
+        conn.commit()
+        st.success("Record Updated Successfully!!!")
+        
+        
 
 # Function to delete a record
 def delete_record():
     st.subheader("Delete a Record")
     id = st.number_input("Enter ID", min_value=1)
     if st.button("Delete"):
-        c.execute("DELETE FROM stock_data_alert WHERE id=?", (id,))
+        c.execute("DELETE FROM stock_data WHERE id=?", (id,))
         conn.commit()
         st.success("Record Deleted Successfully!!!")
 
 # Function to find stock prices
 def find_stock_price():
     st.subheader("Check Prices")
-    c.execute("SELECT id, ticker, exchange, highest_price, lowest_price FROM stock_data_alert")
+    c.execute("SELECT id, ticker, exchange, highest_price, lowest_price FROM stock_data")
     rows = c.fetchall()
 
     below_lowest_messages = []  # Collect messages for stocks below the lowest price
@@ -126,6 +125,9 @@ def main():
         delete_record()
     elif option == "Find Stock Price":
         find_stock_price()
+    find_stock_price()
+
+    
     display_records()
 
     # Display records at all times
