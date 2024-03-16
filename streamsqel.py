@@ -4,11 +4,11 @@ import requests
 from bs4 import BeautifulSoup
 
 # Establish a connection to SQLite database
-conn = sqlite3.connect('stock_alert.db')
+conn = sqlite3.connect('stock_data_alert.db')
 c = conn.cursor()
 
 # Create table if not exists
-c.execute('''CREATE TABLE IF NOT EXISTS stock_data
+c.execute('''CREATE TABLE IF NOT EXISTS stock_data_alert
              (id INTEGER PRIMARY KEY AUTOINCREMENT, 
              ticker TEXT UNIQUE, 
              exchange TEXT UNIQUE,
@@ -20,7 +20,7 @@ conn.commit()
 # Function to display the table
 def display_records():
     st.subheader("Read Records")
-    c.execute("SELECT * FROM stock_data")
+    c.execute("SELECT * FROM stock_data_alert")
     result = c.fetchall()
     for row in result:
         st.write(row)
@@ -35,7 +35,7 @@ def create_record():
     lowest_price = st.text_input("Enter the support price")
     if st.button("Create"):
         try:
-            c.execute("INSERT INTO stock_data (ticker, exchange, notes, highest_price, lowest_price) VALUES (?, ?, ?, ?, ?)", (ticker, exchange, notes, highest_price, lowest_price))
+            c.execute("INSERT INTO stock_data_alert (ticker, exchange, notes, highest_price, lowest_price) VALUES (?, ?, ?, ?, ?)", (ticker, exchange, notes, highest_price, lowest_price))
             conn.commit()
             st.success("Record Created Successfully!!!")
         except sqlite3.IntegrityError:
@@ -52,7 +52,7 @@ def update_record():
     lowest_price = st.text_input("Enter the support price")
     if st.button("Update"):
         try:
-            c.execute("UPDATE stock_data SET ticker=?, exchange=?, notes=?, highest_price=?, lowest_price=? WHERE id=?", (ticker, exchange, notes, highest_price, lowest_price, id))
+            c.execute("UPDATE stock_data_alert SET ticker=?, exchange=?, notes=?, highest_price=?, lowest_price=? WHERE id=?", (ticker, exchange, notes, highest_price, lowest_price, id))
             conn.commit()
             st.success("Record Updated Successfully!!!")
         except sqlite3.IntegrityError:
@@ -63,14 +63,14 @@ def delete_record():
     st.subheader("Delete a Record")
     id = st.number_input("Enter ID", min_value=1)
     if st.button("Delete"):
-        c.execute("DELETE FROM stock_data WHERE id=?", (id,))
+        c.execute("DELETE FROM stock_data_alert WHERE id=?", (id,))
         conn.commit()
         st.success("Record Deleted Successfully!!!")
 
 # Function to find stock prices
 def find_stock_price():
     st.subheader("Check Prices")
-    c.execute("SELECT id, ticker, exchange, highest_price, lowest_price FROM stock_data")
+    c.execute("SELECT id, ticker, exchange, highest_price, lowest_price FROM stock_data_alert")
     rows = c.fetchall()
 
     below_lowest_messages = []  # Collect messages for stocks below the lowest price
