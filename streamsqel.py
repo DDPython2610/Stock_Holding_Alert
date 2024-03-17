@@ -3,7 +3,7 @@ import sqlite3
 import requests
 from bs4 import BeautifulSoup
 
-# Establish a connection to SQLite database
+# Establish a connection to SQLite dB
 conn = sqlite3.connect('stock_data_alert.db')
 c = conn.cursor()
 
