@@ -1,6 +1,9 @@
 import smtplib, ssl
 import os
 import sqlite3
+import requests
+from bs4 import BeautifulSoup
+
 
 conn = sqlite3.connect('stock_data_alert.db')
 c = conn.cursor()
