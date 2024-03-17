@@ -2,7 +2,7 @@ import smtplib, ssl
 import os
 import sqlite3
 
-from bs4 import BeautifulSoup
+
 from streamsqel import find_stock_price
 
 
@@ -24,7 +24,6 @@ for row in rows:
     id, ticker, exchange, highest_price, lowest_price = row
     url = f'https://www.google.com/finance/quote/{ticker}:{exchange}'
     
-    soup = BeautifulSoup(response.text, 'html.parser')
     class1 = "YMlKec fxKbKc"
     found_element = soup.find(class_=class1)
 
