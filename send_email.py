@@ -2,7 +2,7 @@ import smtplib, ssl
 import os
 import sqlite3
 
-conn = sqlite3.connect('stock_alert.db')
+conn = sqlite3.connect('stock_data_alert.db')
 c = conn.cursor()
 
 port = 465
