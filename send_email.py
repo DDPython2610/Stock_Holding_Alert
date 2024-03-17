@@ -3,6 +3,7 @@ import os
 import sqlite3
 import requests
 from bs4 import BeautifulSoup
+from streamsqel import find_stock_price
 
 
 conn = sqlite3.connect('stock_data_alert.db')
@@ -22,7 +23,7 @@ above_highest_messages = []  # Collect messages for stocks above the highest pri
 for row in rows:
     id, ticker, exchange, highest_price, lowest_price = row
     url = f'https://www.google.com/finance/quote/{ticker}:{exchange}'
-    response =requests.get(url)
+    
     soup = BeautifulSoup(response.text, 'html.parser')
     class1 = "YMlKec fxKbKc"
     found_element = soup.find(class_=class1)
