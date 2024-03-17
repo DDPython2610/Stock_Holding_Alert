@@ -1,6 +1,9 @@
 import smtplib, ssl
 import os
 
+conn = sqlite3.connect('stock_alert.db')
+c = conn.cursor()
+
 port = 465
 smtp_server = "smtp.gmail.com"
 USERNAME = os.environ.get('USER_EMAIL')
