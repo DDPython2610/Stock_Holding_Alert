@@ -6,6 +6,9 @@ smtp_server = "smtp.gmail.com"
 USERNAME = os.environ.get('USER_EMAIL')
 PASSWORD = os.environ.get('USER_PASSWORD')
 
+c.execute("SELECT id, ticker, exchange, highest_price, lowest_price FROM stock_data")
+rows = c.fetchall()
+
 below_lowest_messages = []  # Collect messages for stocks below the lowest price
 above_highest_messages = []  # Collect messages for stocks above the highest price
 
