@@ -1,7 +1,7 @@
 import smtplib, ssl
 import os
 import sqlite3
-import requests
+
 from bs4 import BeautifulSoup
 from streamsqel import find_stock_price
 
