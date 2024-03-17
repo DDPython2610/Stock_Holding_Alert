@@ -22,7 +22,7 @@ above_highest_messages = []  # Collect messages for stocks above the highest pri
 for row in rows:
     id, ticker, exchange, highest_price, lowest_price = row
     url = f'https://www.google.com/finance/quote/{ticker}:{exchange}'
-    response = requests.get(url)
+    response =requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     class1 = "YMlKec fxKbKc"
     found_element = soup.find(class_=class1)
